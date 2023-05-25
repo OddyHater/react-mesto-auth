@@ -13,7 +13,7 @@ const Register = ({onSubmit}) => {
 
     setFormValue({
       ...formValue,
-      [name]: value      
+      [name]: value
     })
   }
 

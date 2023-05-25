@@ -30,6 +30,10 @@ function App() {
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [userData, setUserData] = useState({
+    _id: '',
+    email: ''
+  })
 
   const navigate = useNavigate();
 
@@ -69,9 +73,18 @@ function App() {
     if(token) {
       AppApi.checkToken(token)
         .then((res) => {
-          console.log(res);
+          console.log(res.data._id);
           setLoggedIn(true);
-          navigate('/', {replace: true})
+
+          setUserData({
+            ...userData,
+            _id: res.data._id,
+            email: res.data.email
+          })
+          navigate('/', {replace: true});
+        })
+        .then(() => {
+          console.log(userData);
         })
     }
   }, []);
@@ -188,6 +201,11 @@ function App() {
       })
   }
 
+  function handleLoggout() {
+    localStorage.removeItem('token');
+    setLoggedIn(false);
+  }
+
   async function handleAddPlace(newCardData) {
     /*актуализируем стейт
     напрямую с сервера*/
@@ -207,7 +225,10 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <CardContext.Provider value={cards}>
 
-      <Header />
+      <Header 
+        email={userData.email}
+        handleLoggoutButtonClick={handleLoggout} 
+      />
 
       <Routes>
 
