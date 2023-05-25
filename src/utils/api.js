@@ -146,6 +146,18 @@ class Api {
     .then(res => res)
     .catch((err) => console.log(err));
   }
+
+  checkToken(token) {
+    return fetch(`${this._url}/users/me`, {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization" : `Bearer ${token}`
+      }
+    })
+    .then(res => res.json())
+    .catch(err => err);
+  }
   
 }
 

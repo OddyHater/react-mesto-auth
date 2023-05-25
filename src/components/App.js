@@ -63,6 +63,19 @@ function App() {
       .catch((err) => console.log(err));
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if(token) {
+      AppApi.checkToken(token)
+        .then((res) => {
+          console.log(res);
+          setLoggedIn(true);
+          navigate('/', {replace: true})
+        })
+    }
+  }, []);
+
   function handleCardClick(card) {
     setSelectedCard(card);
   }
