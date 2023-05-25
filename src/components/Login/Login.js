@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import AppApi from '../../utils/api';
 
-const Login = () => {
+const Login = ({onSubmit}) => {
 
   const [formValue, setFormValue] = useState({
     email: '',
@@ -21,17 +21,7 @@ const Login = () => {
   const onLogin = (evt) => {
     evt.preventDefault();
 
-    if(!formValue.email || !formValue.password) {
-      return;
-    }
-
-    AppApi.login(formValue)
-      .then((res) => {
-        if(res.token) {
-          localStorage.setItem('token', res.token);
-          console.log(123);
-        }
-      })
+    onSubmit(formValue);
   }
 
   return (

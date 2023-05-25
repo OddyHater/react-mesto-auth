@@ -157,6 +157,24 @@ function App() {
       })
   }
 
+  function handleLogin({email, password}) {
+    if(!email || !password) {
+      return;
+    }
+
+    AppApi.login({email, password})
+      .then((res) => {
+        console.log(res);
+        if(!res) {
+          return
+        }
+        localStorage.setItem('token', res.token);
+        console.log(123);
+        setLoggedIn(true);
+        navigate('/', {replace: true});
+      })
+  }
+
   async function handleAddPlace(newCardData) {
     /*актуализируем стейт
     напрямую с сервера*/
@@ -193,7 +211,7 @@ function App() {
 
         <Route path="/sign-up" element={<Register onSubmit={handleRegiser}/>} />
 
-        <Route path="/sign-in" element={<Login />} />
+        <Route path="/sign-in" element={<Login onSubmit={handleLogin} />} />
 
       </Routes>
 
