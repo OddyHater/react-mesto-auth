@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Switch from "react-switch";
 import Header from './Header/Header';
 import Main from './Main/Main';
 import Footer from './Footer/Footer';
@@ -7,6 +9,7 @@ import EditProfilePopup from './EditProfilePopup/EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup/EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup/AddPlacePopup';
 import ImagePopup from './ImagePopup/ImagePopup';
+import ProtectedRoute from './ProtectedRoute/ProtectedRoute' ;
 import AppApi from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { CardContext } from '../contexts/CardsContext';
@@ -17,6 +20,8 @@ function App() {
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -130,36 +135,53 @@ function App() {
   }
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+    <BrowserRouter>
+      <CurrentUserContext.Provider value={currentUser}>
       <CardContext.Provider value={cards}>
 
       <Header />
 
-      <Main
+        <Routes>
+          <Route path="/" 
+            element={<ProtectedRoute element={Main} 
+            onEditProfile={() => {setEditProfilePopupOpen(true)}}
+            onAddPlace={() => {setAddPlacePopupOpen(true)}}
+            onEditAvatar={() => {setEditAvatarPopupOpen(true)}}
+            onCardClick={(card) => handleCardClick(card)}
+            onCardLike={(card) => handleCardLike(card)}
+            onCardDelete={(card) => handleCardDelete(card)}
+          />} />
+        </Routes>
+      
+    
+      {/* <Main
         onEditProfile={() => {setEditProfilePopupOpen(true)}}
         onAddPlace={() => {setAddPlacePopupOpen(true)}}
         onEditAvatar={() => {setEditAvatarPopupOpen(true)}}
         onCardClick={(card) => handleCardClick(card)}
         onCardLike={(card) => handleCardLike(card)}
         onCardDelete={(card) => handleCardDelete(card)}
-      />
+      /> */}
 
       <Footer />
 
       <EditProfilePopup 
         isOpen={isEditProfilePopupOpen} 
         onClose={closeAllPopups} 
-        onUpdateUser={handleUpdateUser} />
+        onUpdateUser={handleUpdateUser} 
+      />
 
       <AddPlacePopup 
         isOpen={isAddPlacePopupOpen} 
         onClose={closeAllPopups} 
-        onAddPlace={handleAddPlace} />
+        onAddPlace={handleAddPlace} 
+      />
 
       <EditAvatarPopup 
         isOpen={isEditAvatarPopupOpen} 
         onClose={closeAllPopups} 
-        onAvatarUpdate={handleAvatarUpdate} />
+        onAvatarUpdate={handleAvatarUpdate} 
+      />
 
       <PopupWithForm
         name="delete"
@@ -174,7 +196,8 @@ function App() {
       />
 
       </CardContext.Provider>
-    </CurrentUserContext.Provider>    
+    </CurrentUserContext.Provider>
+    </BrowserRouter>
   );
 }
 
