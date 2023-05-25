@@ -1,3 +1,5 @@
+@import url(./blocks/root/root.css);
+@import url(./blocks/root/__container/root__container.css);
 @import url(./vendor/normalize.css);
 @import url(./vendor/fonts.css);
 @import url(./blocks/page/page.css);
@@ -44,6 +46,16 @@
 @import url(./blocks/footer/footer.css);
 @import url(./blocks/footer/__copyright/footer__copyright.css);
 /*FOOTER*/
+
+/*LOGIN*/
+@import url(./blocks/login/login.css);
+@import url(./blocks/login/__form/login__form.css);
+@import url(./blocks/login/__title/login__title.css);
+@import url(./blocks/login/__input/login__input.css);
+@import url(./blocks/login/__submit/login__submit.css);
+@import url(./blocks/login/__input/_type/login__input_type_email.css);
+@import url(./blocks/login/__input/_type/login__input_type_password.css);
+/*LOGIN*/
 
 /*POP-UP*/
 @import url(./blocks/popup/popup.css);

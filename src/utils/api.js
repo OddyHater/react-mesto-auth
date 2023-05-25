@@ -1,6 +1,7 @@
 class Api {
-  constructor({headers}) {
+  constructor({headers, url}) {
     this._headers = headers;
+    this._url = url;
   }
 
   _getResponseData(res) {
@@ -103,14 +104,60 @@ class Api {
       return this._getResponseData(res);
     })   
   }
+
+  regiser({email, password}) {
+    return fetch(`${this._url}/signup`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({password, email})
+    })
+    .then((response) => {
+      try {
+        if (response.status === 200){
+          return response.json();
+        }
+      } catch(e){
+        return (e)
+      }
+    })
+    .then(res => res)
+    .catch((err) => console.log(err));
+  }
+
+  login({email, password}) {
+    return fetch(`${this._url}/signin`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({email, password})
+    })
+    .then((response) => {
+      try {
+        if (response.status === 200){
+          return response.json();
+        }
+      } catch(e){
+        return (e)
+      }
+    })
+    .then(res => res)
+    .catch((err) => console.log(err));
+  }
+  
 }
 
 const apiOptions = {  
   headers: {
     authorization: '49fa0164-6f79-4747-b9b7-a7fde6f409fd',
     'Content-type': 'application/json'
-  }
+  },
+
+  url: 'https://auth.nomoreparties.co'
 };
+
 
 const AppApi = new Api(apiOptions);
 
