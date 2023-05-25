@@ -123,7 +123,7 @@ class Api {
       }
     })
     .then(res => res)
-    .catch((err) => console.log(err));
+    .catch(err => err);
   }
 
   login({email, password}) {

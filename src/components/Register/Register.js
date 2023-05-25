@@ -1,9 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AppApi from '../../utils/api';
 
-const Register = () => {
+const Register = ({onSubmit}) => {
 
   const [formValue, setFormValue] = useState({
     email: '',
@@ -19,22 +17,10 @@ const Register = () => {
     })
   }
 
-  const navigate = useNavigate()
-  
   const onRegister = (evt) => {
     evt.preventDefault();
 
-    if(!formValue.email || !formValue.password) {
-      return;
-    }
-
-    AppApi.regiser(formValue)
-      .then((res) => {
-        if(res) {
-          navigate('/sign-in', {replace: true});
-        }
-      })
-      .catch((err) => console.log(err));
+    onSubmit(formValue);
   }
 
 
