@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState} from 'react';
+import { Link } from 'react-router-dom';
 
 const Register = ({onSubmit}) => {
   const [formValue, setFormValue] = useState({
@@ -47,8 +48,9 @@ const Register = ({onSubmit}) => {
           value="Submit"
           className="login__submit"
         >
-          Войти
+          Зарегистрироваться
         </button>
+        <Link to="/sign-in" className="login__description">Уже зарегистрированы? Войти</Link>
       </form>
     </div>
   );
