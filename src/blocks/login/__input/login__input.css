@@ -9,6 +9,7 @@
 
 .login__input:focus {
   outline: 0;
+  border-bottom: 2px solid #fff;
 }
 
 .login__input::placeholder {
