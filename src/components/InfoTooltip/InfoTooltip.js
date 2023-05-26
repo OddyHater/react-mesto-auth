@@ -1,5 +1,4 @@
 import React from 'react';
-import { useEffect } from 'react';
 
 const InfoTooltip = ({isOpen, name, title, image, onClose}) => {
   return (
@@ -12,7 +11,7 @@ const InfoTooltip = ({isOpen, name, title, image, onClose}) => {
           <img src={`${image}`} alt="" className={`popup-${name}__image`} />
 
           <h2 
-            className="popup__title">
+            className={`popup-${name}__title`}>
               {title}
           </h2>
 

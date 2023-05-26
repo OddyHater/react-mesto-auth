@@ -162,6 +162,7 @@ function App() {
     AppApi.regiser({email, password})
       .then((res) => {
         if(res) {
+          console.log(res);
           setInfoTitle('Вы успешно зарегистрировались!');
           setInfoImage(success);
           navigate('/sign-in', {replace: true});
