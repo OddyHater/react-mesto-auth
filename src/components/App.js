@@ -69,25 +69,23 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-
     if(token) {
       AppApi.checkToken(token)
         .then((res) => {
           console.log(res.data._id);
-          setLoggedIn(true);
-
           setUserData({
             ...userData,
             _id: res.data._id,
             email: res.data.email
           })
+          setLoggedIn(true);
           navigate('/', {replace: true});
         })
         .then(() => {
           console.log(userData);
         })
     }
-  }, []);
+  }, [loggedIn]);
 
   function handleCardClick(card) {
     setSelectedCard(card);
@@ -195,7 +193,7 @@ function App() {
           return
         }
         localStorage.setItem('token', res.token);
-        console.log(123);
+
         setLoggedIn(true);
         navigate('/', {replace: true});
       })
@@ -203,7 +201,16 @@ function App() {
 
   function handleLoggout() {
     localStorage.removeItem('token');
+    setUserData({
+      ...userData,
+      _id: '',
+      email: '' 
+    })
     setLoggedIn(false);
+  }
+
+  function navigateTo(route) {
+    navigate(`${route}`, {replace: true});
   }
 
   async function handleAddPlace(newCardData) {
@@ -227,7 +234,7 @@ function App() {
 
       <Header 
         email={userData.email}
-        handleLoggoutButtonClick={handleLoggout} 
+        handleLoggoutButtonClick={handleLoggout}
       />
 
       <Routes>
