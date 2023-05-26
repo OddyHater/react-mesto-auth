@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState } from 'react';
-import AppApi from '../../utils/api';
 
 const Login = ({onSubmit}) => {
 

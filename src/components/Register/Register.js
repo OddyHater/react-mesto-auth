@@ -1,8 +1,7 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState} from 'react';
 
 const Register = ({onSubmit}) => {
-
   const [formValue, setFormValue] = useState({
     email: '',
     password: ''

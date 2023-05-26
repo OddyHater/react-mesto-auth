@@ -2,10 +2,6 @@ import React from 'react';
 import { useEffect } from 'react';
 
 const InfoTooltip = ({isOpen, name, title, image, onClose}) => {
-  useEffect(() => {
-    console.log(title, image);
-  }, [isOpen]);
-
   return (
     <div className={
         isOpen ? `popup popup-${name} popup_opened` : 

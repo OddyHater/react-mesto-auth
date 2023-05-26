@@ -52,6 +52,22 @@ function App() {
   }
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if(token) {
+      AppApi.checkToken(token)
+        .then((res) => {
+          setUserData({
+            ...userData,
+            _id: res.data._id,
+            email: res.data.email
+          })
+          setLoggedIn(true);
+          navigate('/', {replace: true});
+        })
+      }
+  }, [loggedIn]);
+  
+  useEffect(() => {
     AppApi.getProfileInfo()
       .then((res) => {
         setCurrentUser(res);
@@ -67,25 +83,6 @@ function App() {
       .catch((err) => console.log(err));
   }, []);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if(token) {
-      AppApi.checkToken(token)
-        .then((res) => {
-          console.log(res.data._id);
-          setUserData({
-            ...userData,
-            _id: res.data._id,
-            email: res.data.email
-          })
-          setLoggedIn(true);
-          navigate('/', {replace: true});
-        })
-        .then(() => {
-          console.log(userData);
-        })
-    }
-  }, [loggedIn]);
 
   function handleCardClick(card) {
     setSelectedCard(card);
@@ -209,10 +206,6 @@ function App() {
     setLoggedIn(false);
   }
 
-  function navigateTo(route) {
-    navigate(`${route}`, {replace: true});
-  }
-
   async function handleAddPlace(newCardData) {
     /*актуализируем стейт
     напрямую с сервера*/
@@ -250,7 +243,7 @@ function App() {
           onCardDelete={(card) => handleCardDelete(card)}
         />} />
 
-        <Route path="/sign-up" element={<Register onSubmit={handleRegiser}/>} />
+        <Route path="/sign-up" element={<Register onSubmit={handleRegiser} />} />
 
         <Route path="/sign-in" element={<Login onSubmit={handleLogin} />} />
 
