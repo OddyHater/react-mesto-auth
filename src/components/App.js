@@ -16,17 +16,15 @@ import ImagePopup from './ImagePopup/ImagePopup';
 import InfoTooltip from './InfoTooltip/InfoTooltip';
 
 import AppApi from '../utils/api';
+import AuthApi from '../utils/auth';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { CardContext } from '../contexts/CardsContext';
-
-import success from '../images/svg/success.svg';
-import cancel from '../images/svg/cancel.svg';
 
 
 function App() {
 
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
-  const [isInfoPopupOpen, setisInfoPopupOpen] = useState(false);
+  const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
@@ -39,13 +37,13 @@ function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [infoTitle, setInfoTitle] = useState('');
-  const [InfoImage, setInfoImage] = useState('');
+  const [InfoImageStatus, setInfoImageStatus] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
   const closeAllPopups = () => {
     setEditProfilePopupOpen(false);
-    setisInfoPopupOpen(false);
+    setIsInfoPopupOpen(false);
     setAddPlacePopupOpen(false);
     setEditAvatarPopupOpen(false);
     setSelectedCard(null);
@@ -54,7 +52,7 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if(token) {
-      AppApi.checkToken(token)
+      AuthApi.checkToken(token)
         .then((res) => {
           setUserData({
             ...userData,
@@ -64,6 +62,7 @@ function App() {
           setLoggedIn(true);
           navigate('/', {replace: true});
         })
+        .catch((err) => console.log(err));
       }
   }, [loggedIn]);
   
@@ -157,26 +156,26 @@ function App() {
   function handleRegiser({email, password}) {
     if(!email || !password) {
       return;
-    }
+    };
 
-    AppApi.regiser({email, password})
+    AuthApi.regiser({email, password})
       .then((res) => {
-        if(res) {
+        if(res.data) {
           console.log(res);
           setInfoTitle('Вы успешно зарегистрировались!');
-          setInfoImage(success);
+          setInfoImageStatus(true);
           navigate('/sign-in', {replace: true});
         } else {
           setInfoTitle('Что-то пошло не так! Попробуйте ещё раз.');
-          setInfoImage(cancel);
+          setInfoImageStatus(false);
         }
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
-        setisInfoPopupOpen(true);
-      })
+        setIsInfoPopupOpen(true);
+      });
   }
 
   function handleLogin({email, password}) {
@@ -184,7 +183,7 @@ function App() {
       return;
     }
 
-    AppApi.login({email, password})
+    AuthApi.login({email, password})
       .then((res) => {
         console.log(res);
         if(!res) {
@@ -195,7 +194,8 @@ function App() {
         setLoggedIn(true);
         navigate('/', {replace: true});
       })
-  }
+      .catch((err) => console.log(err));
+  } 
 
   function handleLoggout() {
     localStorage.removeItem('token');
@@ -214,12 +214,10 @@ function App() {
       await AppApi.pushCardToServer(newCardData);
       const res = await AppApi.getInitialCards();
       setCards(res);
-
+      closeAllPopups();
     } catch (err) {
       console.log(err);
     }
-
-    closeAllPopups();
   }
 
   return (
@@ -287,7 +285,7 @@ function App() {
         onClose={closeAllPopups}
         name={'info'}
         title={infoTitle}
-        image={InfoImage}
+        imageStatus={InfoImageStatus}
       />
 
       </CardContext.Provider>

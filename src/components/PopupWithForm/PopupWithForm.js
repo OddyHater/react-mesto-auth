@@ -29,9 +29,7 @@ function PopupWithForm({title, name, children, isOpen, onClose, buttonText, onSu
           type="button"
           aria-label="Закрыть"
           className="popup__close-button clickable"
-          onClick={onClose}>
-
-        </button>
+          onClick={onClose} />
 
       </div>
 

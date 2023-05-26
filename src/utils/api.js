@@ -1,7 +1,7 @@
 class Api {
-  constructor({headers, url}) {
+  constructor({baseUrl, headers}) {
+    this._url = baseUrl;
     this._headers = headers;
-    this._url = url;
   }
 
   _getResponseData(res) {
@@ -12,7 +12,7 @@ class Api {
   }
 
   getProfileInfo() {
-    return fetch('https://nomoreparties.co/v1/cohort-62/users/me', {
+    return fetch(`https://${this._url}/users/me`, {
       headers: this._headers
     })
       .then(res => {        
@@ -21,7 +21,7 @@ class Api {
   }
 
   changeProfileInfo(item) {
-    return fetch('https://nomoreparties.co/v1/cohort-62/users/me', {
+    return fetch(`https://${this._url}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
@@ -38,7 +38,7 @@ class Api {
   }
 
   pushCardToServer({name, link, like, id}) {
-    return fetch('https://mesto.nomoreparties.co/v1/cohort-62/cards', {
+    return fetch(`https://mesto.${this._url}/cards`, {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({
@@ -54,7 +54,7 @@ class Api {
   }
 
   removeCardFromServer(cardID) {
-    return fetch(`https://mesto.nomoreparties.co/v1/cohort-62/cards/${cardID}`, {
+    return fetch(`https://mesto.${this._url}/cards/${cardID}`, {
       method: 'DELETE',
       headers: this._headers
     })
@@ -64,7 +64,7 @@ class Api {
   }
 
   addLike(cardId) {
-    return fetch(`https://mesto.nomoreparties.co/v1/cohort-62/cards/${cardId}/likes`, {
+    return fetch(`https://mesto.${this._url}/cards/${cardId}/likes`, {
       method: 'PUT',
       headers: this._headers
     })
@@ -74,7 +74,7 @@ class Api {
   }
 
   removeLike(cardId) {
-    return fetch(`https://mesto.nomoreparties.co/v1/cohort-62/cards/${cardId}/likes`, {
+    return fetch(`https://mesto.${this._url}/cards/${cardId}/likes`, {
       method: 'DELETE', 
       headers: this._headers
     })
@@ -84,7 +84,7 @@ class Api {
   }
 
   changeAvatar(link) {  
-    return fetch(`https://mesto.nomoreparties.co/v1/cohort-62/users/me/avatar`, {
+    return fetch(`https://mesto.${this._url}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
@@ -97,80 +97,21 @@ class Api {
   }
 
   getInitialCards() {
-    return fetch('https://mesto.nomoreparties.co/v1/cohort-62/cards', {
+    return fetch(`https://mesto.${this._url}/cards`, {
       headers: this._headers
     })
     .then(res => {      
       return this._getResponseData(res);
-    })   
+    })
   }
-
-  regiser({email, password}) {
-    return fetch(`${this._url}/signup`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({password, email})
-    })
-    .then((response) => {
-      try {
-        if (response.status === 200 || response.status === 201) {
-          return response.json();
-        }
-      } catch(e){
-        return (e)
-      }
-    })
-    .then(res => res)
-    .catch(err => err);
-  }
-
-  login({email, password}) {
-    return fetch(`${this._url}/signin`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({email, password})
-    })
-    .then((response) => {
-      try {
-        if (response.status === 200){
-          return response.json();
-        }
-      } catch(e){
-        return (e)
-      }
-    })
-    .then(res => res)
-    .catch((err) => console.log(err));
-  }
-
-  checkToken(token) {
-    return fetch(`${this._url}/users/me`, {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization" : `Bearer ${token}`
-      }
-    })
-    .then(res => res.json())
-    .catch(err => err);
-  }
-  
 }
 
-const apiOptions = {  
+const AppApi = new Api({
+  baseUrl: 'nomoreparties.co/v1/cohort-62',
   headers: {
     authorization: '49fa0164-6f79-4747-b9b7-a7fde6f409fd',
     'Content-type': 'application/json'
-  },
-
-  url: 'https://auth.nomoreparties.co'
-};
-
-
-const AppApi = new Api(apiOptions);
+  }
+});
 
 export default AppApi;

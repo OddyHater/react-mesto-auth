@@ -5,9 +5,9 @@ import { Routes, Route, Link } from "react-router-dom";
 function Header({email, handleLoggoutButtonClick}) {
   return (
     <header className="header">
-        <a href="/" className="header__link">
-        <img src={logoPath} alt="Логотип Место" className="header__logo"/>
-        </a>
+        <Link to="/" className="header__link">
+          <img src={logoPath} alt="Логотип Место" className="header__logo"/>
+        </Link>
         <div className="header__button-container">
 
           <Routes>

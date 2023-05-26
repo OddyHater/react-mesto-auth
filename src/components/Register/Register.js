@@ -9,7 +9,7 @@ const Register = ({onSubmit}) => {
   });
 
   const handleFormChange = (evt) => {
-    let {name, value} = evt.target;
+    const {name, value} = evt.target;
 
     setFormValue({
       ...formValue,
@@ -31,6 +31,7 @@ const Register = ({onSubmit}) => {
         <input
           type="email"
           name="email"
+          value={formValue.email}
           className="login__input login__input_type_email"
           placeholder="Email"
           onChange={handleFormChange}
@@ -39,6 +40,7 @@ const Register = ({onSubmit}) => {
         <input
           type="password"
           name="password"
+          value={formValue.password}
           className="login__input login__input_type_password"
           placeholder="Пароль"
           onChange={handleFormChange}
